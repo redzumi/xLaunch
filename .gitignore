@@ -2,3 +2,4 @@ obj/
 bin/
 .vscode
 .test
+.DS_STORE
