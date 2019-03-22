@@ -55,6 +55,32 @@ internal class Utility
     return localFiles;
   }
 
+  public async static Task downloadFile(LaunchFile launchFile)
+  {
+    string fileUrl = Settings.BaseUrl + launchFile.filename;
+
+    Console.WriteLine(fileUrl);
+
+    HttpClient client = new HttpClient();
+    HttpResponseMessage response = await client.GetAsync(fileUrl);
+
+    using (Stream stream = await response.Content.ReadAsStreamAsync())
+    {
+      FileInfo fileInfo = new FileInfo(launchFile.filename);
+      fileInfo.Directory.Create();
+
+      using (FileStream fileStream = fileInfo.OpenWrite())
+      {
+        await stream.CopyToAsync(fileStream);
+      }
+    }
+  }
+
+  public static void deleteFile(string filename)
+  {
+    File.Delete(filename);
+  }
+
   public static string getFileHash(string filename)
   {
     MD5 md5 = MD5.Create();

@@ -20,18 +20,22 @@ namespace xLaunch
       foreach (LaunchFile extraFile in extraFiles)
       {
         Console.WriteLine(extraFile.filename + " : " + extraFile.hash);
+        Utility.deleteFile(extraFile.filename);
       }
 
       Console.WriteLine("=== missing files (download) ===");
       foreach (LaunchFile missingFile in missingFiles)
       {
         Console.WriteLine(missingFile.filename + " : " + missingFile.hash);
+        await Utility.downloadFile(missingFile);
       }
 
       Console.WriteLine("=== wrong files (replace) ===");
       foreach (LaunchFile wrongFile in wrongFiles)
       {
         Console.WriteLine(wrongFile.filename + " : " + wrongFile.hash);
+        Utility.deleteFile(wrongFile.filename);
+        await Utility.downloadFile(wrongFile);
       }
     }
   }
