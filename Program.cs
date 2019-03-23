@@ -9,6 +9,8 @@ namespace xLaunch
   {
     static async Task Main(string[] args)
     {
+      Utility.checkBaseDirExist();
+
       List<LaunchFile> localFiles = Utility.getLocalFiles();
       List<LaunchFile> serverFiles = await Utility.getServerFiles();
 

@@ -114,4 +114,8 @@ internal class Utility
   {
     return Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories);
   }
+
+  public static void checkBaseDirExist() {
+    Directory.CreateDirectory(Settings.BaseDir);
+  }
 }
