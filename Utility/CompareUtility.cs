@@ -14,6 +14,11 @@ internal class CompareUtility
 
       if (serverSignature != null && serverSignature.hash != localFile.hash)
       {
+        Console.WriteLine("==== found wrong file ====");
+        Console.WriteLine("filename: " + serverSignature.filename);
+        Console.WriteLine("server hash: " + serverSignature.hash);
+        Console.WriteLine("local hash: " + localFile.hash);
+        Console.WriteLine("==== found wrong file ====");
         wrongFiles.Add(serverSignature);
       }
     }

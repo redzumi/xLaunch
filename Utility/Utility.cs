@@ -26,7 +26,7 @@ internal class Utility
 
       string[] launchFileData = launchFile.Split(':');
       string filename = launchFileData[0];
-      string hash = launchFileData[1];
+      string hash = launchFileData[1].Trim();
 
       file.filename = filename;
       file.hash = hash;
@@ -47,7 +47,7 @@ internal class Utility
       LaunchFile launchFile = new LaunchFile();
 
       launchFile.filename = filename;
-      launchFile.hash = Utility.getFileHash(filename);
+      launchFile.hash = Utility.getFileHash(filename).Trim();
 
       localFiles.Add(launchFile);
     }
@@ -58,8 +58,6 @@ internal class Utility
   public async static Task downloadFile(LaunchFile launchFile)
   {
     string fileUrl = Settings.BaseUrl + launchFile.filename;
-
-    Console.WriteLine(fileUrl);
 
     HttpClient client = new HttpClient();
     HttpResponseMessage response = await client.GetAsync(fileUrl);
@@ -81,10 +79,29 @@ internal class Utility
     File.Delete(filename);
   }
 
+  public static string generateLockFile()
+  {
+    List<LaunchFile> localFiles = Utility.getLocalFiles();
+
+    string lockFile = "";
+    foreach (LaunchFile localFile in localFiles)
+    {
+      string fileLockString = localFile.filename + ":" + localFile.hash + ";";
+      lockFile += fileLockString;
+    }
+
+    lockFile = lockFile.Remove(lockFile.Length - 1, 1);
+
+    string lockFileDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
+    File.WriteAllText(lockFileDir + Settings.LockFile, lockFile);
+
+    return lockFile;
+  }
+
   public static string getFileHash(string filename)
   {
     MD5 md5 = MD5.Create();
-
+    
     using (FileStream stream = File.OpenRead(filename))
     {
       byte[] hash = md5.ComputeHash(stream);

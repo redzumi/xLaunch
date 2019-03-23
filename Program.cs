@@ -37,6 +37,16 @@ namespace xLaunch
         Utility.deleteFile(wrongFile.filename);
         await Utility.downloadFile(wrongFile);
       }
+
+      if (args.Length > 0)
+      {
+        if (args[0] == "--generate-lock" || args[0] == "-g")
+        {
+          Console.WriteLine("=== lock file ===");
+          string lockFile = Utility.generateLockFile();
+          Console.WriteLine(lockFile);
+        }
+      }
     }
   }
 }
